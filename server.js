@@ -1,6 +1,18 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+   host: 'db154.pair.com',
+   user: 'ment2_17',
+   password: 'gJ9yG2Zc',
+   database: 'ment2_team2'
+});
+
+connection.connect(function(err) {
+   if (err) throw err;
+});
 
 // Sets up the Express App
 
@@ -43,7 +55,19 @@ app.get('/', function(req, res){
 	res.sendFile(path.join(__dirname + '/index.html'));
 })
 
-app.get('/api/:tables?', function(req, res){
+app.get('/reserve', function(req, res){
+	
+	//res.send("Welcome to the Star Wars Page!")
+	res.sendFile(path.join(__dirname + '/reserve.html'));
+})
+
+app.get('/tables', function(req, res){
+	
+	//res.send("Welcome to the Star Wars Page!")
+	res.sendFile(path.join(__dirname + '/tables.html'));
+})
+
+app.get('/api/tables', function(req, res){
 
 	var chosen = req.params.tables;
 
@@ -63,6 +87,29 @@ app.get('/api/:tables?', function(req, res){
 
 	else{
 		res.json(tables);
+	}
+})
+
+app.get('/api/waitlist', function(req, res){
+
+	var chosen = req.params.waitlist;
+
+	if(chosen){
+		console.log(chosen);
+
+		for (var i=0; i <waitlist.length;  i++){
+
+			if (chosen == waitlist[i].routeName){
+				res.json(waitlist[i]);
+				return;
+			}
+		}
+
+		res.json(false);
+	}
+
+	else{
+		res.json(waitlist);
 	}
 })
 
