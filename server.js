@@ -10,10 +10,6 @@ var connection = mysql.createConnection({
    database: 'ment2_team2'
 });
 
-connection.connect(function(err) {
-   if (err) throw err;
-});
-
 // Sets up the Express App
 
 var app = express();
@@ -21,31 +17,15 @@ var PORT = 3000;
 
 // Sets up the Express app to handle data parsing 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 
+
 // Tables
-var tables = [
+var tables = [];
 
-	{
-		name: "Bilal",
-		phonenumber: 123456789,
-		email: "bilalj.mian@gmail.com",
-		uniqueID: 1
-	}
-
-];
-
-var waitlist = [
-
-	{
-		name: "Late McGee",
-		phonenumber: 123456789,
-		email: "latemcgee@gmail.com",
-		uniqueID: 1
-	}
-]
+var waitlist = [];
 
 //Routes
 //===========================================================
@@ -61,33 +41,26 @@ app.get('/reserve', function(req, res){
 	res.sendFile(path.join(__dirname + '/reserve.html'));
 })
 
-app.get('/tables', function(req, res){
-	
-	//res.send("Welcome to the Star Wars Page!")
-	res.sendFile(path.join(__dirname + '/tables.html'));
-})
-
 app.get('/api/tables', function(req, res){
 
-	var chosen = req.params.tables;
+	connection.query('SELECT * FROM customers', function(err, results){
+		console.log('test123');
 
-	if(chosen){
-		console.log(chosen);
+		
+		res.json(results);					
+	});	
+});
 
-		for (var i=0; i <tables.length; i++){
+app.get('/tables', function(req, res){
+	
+	res.sendFile(path.join(__dirname + '/tables.html'));
 
-			if (chosen == tables[i].routeName){
-				res.json(tables[i]);
-				return;
-			}
-		}
+	connection.query('SELECT * FROM customers', function(err, res){
 
-		res.json(false);
-	}
-
-	else{
-		res.json(tables);
-	}
+		res.forEach(function(row) {
+	         console.log(JSON.stringify(row, null, 2));
+	    });
+	});
 })
 
 app.get('/api/waitlist', function(req, res){
@@ -113,8 +86,8 @@ app.get('/api/waitlist', function(req, res){
 	}
 })
 
-// Create New Characters - takes in JSON input
-app.post('/api/reservation', function(req, res){
+// Create New Reservations - takes in JSON input
+app.post('/reserve', function(req, res){
 
 	// req.body hosts is equal to the JSON post sent from the user
 	var newreservation = req.body;
@@ -126,10 +99,26 @@ app.post('/api/reservation', function(req, res){
 
 	// We then display the JSON to the users
 	res.json(newreservation);
-})
+
+	connection.query('INSERT INTO customers(customer_name, phone_number, customer_email) VALUES ("' +newreservation.firstName+'","'+newreservation.number+'","'+newreservation.eMail+'")', function(err){
+		console.log(err);
+
+  	});
+});
+
+
+connection.query('SELECT * FROM customers', function(err, res){
+
+	res.forEach(function(row) {
+         console.log(JSON.stringify(row, null, 2));
+    });
+});
 
 // Starts the server to begin listening 
 // =============================================================
 app.listen(PORT, function(){
 	console.log('App listening on PORT ' + PORT);
 })
+
+connection.connect(function(err) {
+});

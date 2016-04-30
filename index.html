@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<div class="jumbotron container text-center">
+	<div class="jumbotron container">
 		<div class="container">
 			<h1><span class = "glyphicon glyphicon-fire"></span>Hot Restaurant</h1>
 			<hr>
@@ -32,26 +32,14 @@
 
 <script type="text/javascript">
 
-$('#submitBtn').on("click", function(){
-
-	$.get( "http://localhost:3000/api/" + searchedCharacter, function( data ) {
-
-		console.log(data);
-		if(data == false){
-			$("#name").text("The force is not strong with this one. Your character was not found. ");
-			$("#stats").hide();
-		}
-		else {
-			$("#stats").show();
-			$("#name").text(data.name);
-			$("#role").text(data.role);
-			$("#age").text(data.age);
-			$("#forcePoints").text(data.forcePoints);					
-		}
-
-	});
-
-});	
+$.ajax({
+		  type: "GET",
+		  url: "/api/tables",
+		  data: data,
+		  success: function() {
+		  	debugger;
+		  }
+		});
 	
 
 </script>

@@ -27,8 +27,8 @@
 				<h3 class="panel-title"><strong>Current Reservation</strong></h3>
 			</div>
 			<div class="panel-body">
-				<input type="text" id="characterSearch" class="form-control" >
-				<br>
+				<div class ="well">
+			</div>
 			</div>
 		</div>
 
@@ -37,17 +37,20 @@
 				<h3 class="panel-title"><strong>Waiting List</strong></h3>
 			</div>
 			<div class="panel-body">
-				<div class="well">
-								
+				<div class="well">			
 				</div>
 			</div>
 		</div>
-
 		<p>
 			<a id ="apiTable" href="/api/tables">API Table Link</a>
 			|
 			<a id = "waitlist" href="/api/waitlist">API Waitlist Link</a>
 		</p>
-	</div>
+	</div>	
+<script type="text/javascript">
+	$.get( "/tables", function(data) {
+		debugger;
+	});
+</script>	
 </body>
 </html>

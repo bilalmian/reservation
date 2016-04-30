@@ -26,23 +26,55 @@
 				<h3 class="panel-title">Table Reservation</h3>
 			</div>
 			<div class="panel-body">
-				<form action="" method="POST" role="form">
+				<form action="/reserve" method="POST" role="form">
 					<div class="form-group">
 						<label for="">Name</label>
-						<input type="text" class="form-control" id="name" placeholder="">
+						<input type="text" class="form-control" id="name" placeholder="" name="firstName">
 						<br />
 						<label for="">Phone</label>
-						<input type="text" class="form-control" id="phone" placeholder="">
+						<input type="text" class="form-control" id="phone" placeholder="" name="phone">
 						<br />
 						<label for="">Email</label>
-						<input type="text" class="form-control" id="email" placeholder="">
+						<input type="text" class="form-control" id="email" placeholder="" name="email">
 						<br />
 					</div>		
-
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button id = "submitBtn" type="submit" class="btn btn-primary"> Submit</button>
 				</form>
 			</div>
 		</div>
 	</div>
+<script type="text/javascript">
+
+	$('#submitBtn').on('click', function (){
+
+		var data = {};
+		
+		data.firstName = $('#name').val().trim();
+		data.number = $('#phone').val().trim();
+		data.eMail = $('#email').val().trim();
+
+		console.log(data);
+
+		$.ajax({
+		  type: "POST",
+		  url: "/reserve",
+		  data: data,
+		});
+
+		$('#name').val('');
+		$('#phone').val('');
+		$('#email').val('');
+
+		alert("Reservation made")
+
+		return false;
+
+
+	});
+
+
+	
+</script>
+
 </body>
 </html>
